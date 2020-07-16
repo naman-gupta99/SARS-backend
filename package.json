@@ -1,0 +1,44 @@
+{
+  "name": "sars-backend",
+  "version": "1.0.0",
+  "description": "This is the backend for SARS (Search And Rescue Software)",
+  "main": "server.js",
+  "scripts": {
+    "server": "nodemon app.js",
+    "server_dev": "SET NODE_ENV=dev&& npm run server",
+    "server_prod": "SET NODE_ENV=prod&& npm run server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/naman-gupta99/SARS-backend.git"
+  },
+  "author": "TheMaroonKnight",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/naman-gupta99/SARS-backend/issues"
+  },
+  "homepage": "https://github.com/naman-gupta99/SARS-backend#readme",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "fs": "0.0.1-security",
+    "helmet": "^3.23.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.24",
+    "morgan": "^1.10.0",
+    "node-fetch": "^2.6.0",
+    "nodemon": "^2.0.4",
+    "querystring": "^0.2.0",
+    "request": "^2.88.2",
+    "rimraf": "^3.0.2",
+    "swagger-jsdoc": "^4.0.0",
+    "winston": "^3.3.3"
+  }
+}
