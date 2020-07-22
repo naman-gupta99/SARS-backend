@@ -23,8 +23,8 @@ jobs:
     - name: Pull config.js
       run: |
         git clone https://gist.github.com/${{ secrets.CONFIG_URI_ID }}.git
-        mv {{ secret.CONFIG_URI_ID }}/config.js .
-        rm -rf {{ secret.CONFIG_URI_ID }}
+        mv ${{ secret.CONFIG_URI_ID }}/config.js .
+        rm -rf ${{ secret.CONFIG_URI_ID }}
         
     - uses: akhileshns/heroku-deploy@v3.3.6 # This is the action
       with:
