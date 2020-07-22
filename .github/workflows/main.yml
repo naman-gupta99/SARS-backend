@@ -27,6 +27,7 @@ jobs:
         git clone https://gist.github.com/${{ secrets.CONFIG_URI_ID }}.git
         mv ${{ secrets.CONFIG_URI_ID }}/config.js .
         rm -rf ${{ secrets.CONFIG_URI_ID }}
+        ls -a
         
     - uses: akhileshns/heroku-deploy@v3.3.6 # This is the action
       with:
