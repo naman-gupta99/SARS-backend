@@ -28,6 +28,8 @@ jobs:
         mv ${{ secrets.CONFIG_URI_ID }}/config.js .
         rm -rf ${{ secrets.CONFIG_URI_ID }}
         ls -a
+        git add .
+        git commit -m "Add config file"
         
     - uses: akhileshns/heroku-deploy@v3.3.6 # This is the action
       with:
