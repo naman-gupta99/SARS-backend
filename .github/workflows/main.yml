@@ -28,8 +28,16 @@ jobs:
         mv ${{ secrets.CONFIG_URI_ID }}/config.js .
         rm -rf ${{ secrets.CONFIG_URI_ID }}
         ls -a
-        git add .
-        git commit -m "Add config file"
+    
+    - name: Commit changes
+      uses: EndBug/add-and-commit@v4
+      with:
+        author_name: Naman Gupta
+        author_email: kungfunaman@gmail.com
+        message: "add config file"
+        add: "*"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
     - uses: akhileshns/heroku-deploy@v3.3.6 # This is the action
       with:
