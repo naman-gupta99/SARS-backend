@@ -56,7 +56,7 @@ router.get("/:flightId", (req, res) => {
   const flightId = req.params.flightId;
   res
     .status(200)
-    .json(ResponseTemplate.success("Flight State", planeStates[flightId]));
+    .json(ResponseTemplate.success("Flight State", { lat: 21, long: 21 }));
 });
 
 export default router;
