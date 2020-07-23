@@ -1,6 +1,7 @@
 import express from "express";
-import ResponseTemplate from "../global/templates/response";
+
 import FlightPlan from "../models/FlightPlan";
+import ResponseTemplate from "../global/templates/response";
 
 const router = express.Router();
 
