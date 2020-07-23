@@ -24,6 +24,7 @@ router.post("/init/:flightId", (req, res) => {
       let socket = socketIo(flightServer.serverUri);
 
       socket.on("state", (res) => {
+        print(planeStates);
         planeStates[flightServer.flightId] = res;
       });
 
