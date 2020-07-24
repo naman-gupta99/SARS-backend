@@ -21,10 +21,16 @@ router.post("/init/:flightId", (req, res) => {
         throw new Error("Flight Not Found");
       }
 
-      let socket = socketIo(flightServer.serverUri);
+      let socket = socketIo(flightServer.serverUri, {
+        seure: true,
+        rejectUnauthorized: false,
+      });
+
+      socket.on("connect", (res) => {
+        console.log("Connected to flight... " + req.params.flightId);
+      });
 
       socket.on("state", (res) => {
-        print(planeStates);
         planeStates[flightServer.flightId] = res;
       });
 
@@ -54,9 +60,7 @@ router.post("/init/:flightId", (req, res) => {
 // @access Private
 router.get("/:flightId", (req, res) => {
   const flightId = req.params.flightId;
-  res
-    .status(200)
-    .json(ResponseTemplate.success("Flight State", { lat: 21, long: 21 }));
+  res.status(200).json(ResponseTemplate.success("Flight State", planeStates));
 });
 
 export default router;
