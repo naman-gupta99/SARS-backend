@@ -34,6 +34,10 @@ router.post("/init/:flightId", (req, res) => {
         planeStates[flightServer.flightId] = res;
       });
 
+      socket.on("disconnect", () => {
+        planeStates[flightServer.flightId] = { disconnected: true };
+      });
+
       const initUri = flightServer.serverUri + "/flight-state/init";
 
       request.post(
