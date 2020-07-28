@@ -8,10 +8,13 @@ const router = express.Router();
 // @access Private
 router.get("/", (req, res) => {
   const datum = {
-    longitude: 74,
-    latitude: 17,
-    radius: 21,
-    trustVal: 75,
+    circle: {
+      longitude: 74,
+      latitude: 17,
+      radius: 21,
+      trustVal: 75,
+    },
+    line: null,
   };
   res
     .status(200)
