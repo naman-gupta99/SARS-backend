@@ -5,18 +5,6 @@ import cors from "cors";
 import helmet from "helmet";
 import configServer from "../config";
 
-// Function to exclude Endpoints that
-// shouldn't passs through the middleware
-const unless = (path, middleware) => {
-  return function (req, res, next) {
-    if (path === req.path) {
-      return next();
-    } else {
-      return middleware(req, res, next);
-    }
-  };
-};
-
 const middlewareFunctions = (app) => {
   app.set("port", process.env.PORT || configServer.app.PORT);
   // adding security fixes
@@ -27,6 +15,14 @@ const middlewareFunctions = (app) => {
   app.use(helmet.xssFilter()); // set X-XSS-Protection header
   app.enable("trust proxy", ["loopback", "linklocal", "uniquelocal"]);
   app.use(cors());
+
+  app.use(
+    bodyParser.urlencoded({
+      extended: true,
+    })
+  );
+
+  app.use(bodyParser.json());
 
   app.use(
     expressSession({
