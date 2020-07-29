@@ -54,7 +54,7 @@ const initialDatumCalc = (req) => {
     result.circle.longitude = pointOfImpact.longitude;
     result.circle.latitude = pointOfImpact.latitude;
 
-    result.circle.radius = 10;
+    result.circle.radius = 10000;
     result.circle.trustVal = 75;
   } else {
     // Line Datum
@@ -67,7 +67,7 @@ const initialDatumCalc = (req) => {
     result.line.destinationLongitude = req.destinationLongitude;
     result.line.destinationLatitude = req.destinationLatitude;
 
-    result.width = 10;
+    result.width = 10000;
     result.trustVal = 75;
   }
 
