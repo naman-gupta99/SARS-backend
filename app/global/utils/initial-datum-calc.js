@@ -83,9 +83,11 @@ const getCoordinates = (lon, lat, dist, heading) => {
 
   heading = (Math.PI * heading) / 180;
 
-  const lat2 = Math.asin(
-    Math.sin(lat) * Math.cos(dist / R) +
-      Math.cos(lat) * Math.sin(dist / R) * Math.cos(heading)
+  const lat2 = abs(
+    Math.asin(
+      Math.sin(lat) * Math.cos(dist / R) +
+        Math.cos(lat) * Math.sin(dist / R) * Math.cos(heading)
+    )
   );
 
   const lon2 =
