@@ -157,7 +157,7 @@ const initialDatumCalc = (req) => {
     result.line.driftError = driftError;
     result.line.trustVal = 75;
   }
-
+  console.log(result);
   return result;
 };
 
