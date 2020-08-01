@@ -105,8 +105,8 @@ const getCoordinates = (lon, lat, dist, heading) => {
 };
 
 const calculatePointofImpact = (req) => {
-  const lon = req.longitude;
-  const lat = req.latitude;
+  const lon = parseFloat(req.longitude);
+  const lat = parseFloat(req.latitude);
   const alt = req.altitude;
   const gSpeed = req.groundSpeed * 0.514444;
   const vSpeed = req.verticalSpeed * 0.00508;
@@ -157,7 +157,6 @@ const initialDatumCalc = (req) => {
     result.line.driftError = driftError;
     result.line.trustVal = 75;
   }
-  console.log(result);
   return result;
 };
 
