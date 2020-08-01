@@ -83,10 +83,15 @@ const getCoordinates = (lon, lat, dist, heading) => {
 
   heading = (Math.PI * heading) / 180;
 
-  const lat2 = Math.asin(
-    Math.sin(lat) * Math.cos(dist / R) +
-      Math.cos(lat) * Math.sin(dist / R) * Math.cos(heading)
+  const lat2 = Math.abs(
+    Math.asin(
+      Math.sin(lat) * Math.cos(dist / R) +
+        Math.cos(lat) * Math.sin(dist / R) * Math.cos(heading)
+    )
   );
+
+  console.log(Math.sin(lat));
+
   const lon2 =
     lon +
     Math.atan2(
