@@ -66,7 +66,7 @@ const getCraftError = (req) => {
 };
 
 const getDriftError = (lkpTime) => {
-  return (+new Date() - lkpTime) / 7200000;
+  return 0.3 * ((+new Date() - lkpTime) / 3600000);
 };
 
 // ---- Get Latitude of Datum
