@@ -69,7 +69,7 @@ const getDriftError = (lkpTime) => {
   return 0.3 * ((+new Date() - lkpTime) / 3600000);
 };
 
-// ---- Get Latitude of Datum
+// ---- Get Coordinates of Datum
 const getProjectileDistance = (alt, v_x, v_y) => {
   const t2 = Math.pow(v_y, 2) + 2 * 9.8 * alt;
   const t1 = Math.sqrt(t2);
@@ -80,6 +80,8 @@ const getProjectileDistance = (alt, v_x, v_y) => {
 
 const getCoordinates = (lon, lat, dist, heading) => {
   const R = 6371000;
+
+  heading = (Math.PI * heading) / 180;
 
   const lat2 = Math.asin(
     Math.sin(lat) * Math.cos(dist / R) +
@@ -95,7 +97,7 @@ const getCoordinates = (lon, lat, dist, heading) => {
 
   return {
     longitude: lon2,
-    latitude: lat2,
+    latitude: (lat2 * 180) / Math.PI,
   };
 };
 
