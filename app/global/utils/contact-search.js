@@ -1,55 +1,60 @@
-var assert = require("assert");
-var config = require("./config.js");
-var GooglePlaces = require("googleplaces");
+import config from "../../../config";
 
-const contactSearch = async(lati, longi, amenity, callback) => {
-    let results = [];
+import assert from "assert";
+import GooglePlaces from "googleplaces";
 
-    var googlePlaces = new GooglePlaces(config.apiKey, config.outputFormat);
-    var parameters;
+// const assert = require("assert");
+// const GooglePlaces = require('googleplaces');
+// const config = require("./config.js");
 
-    /**
-     * Place details requests - https://developers.google.com/places/documentation/#PlaceDetails
-     */
-    parameters = {
-	location:[lati, longi],
-	types:amenity,
-	rankby:"distance"
-    };
-
-    const placeDetailFunc = async(error, response) => {
-	if (error) throw error;
-	assert.equal(response.status, "OK", "Place details request response status is OK");
-	results.push(response.result);
-    }
-
-    const placeSearchFunc = async(error, response) => {
-	if (error) throw error;
-	for (i = 0; i != 3; i++) {
-	    googlePlaces.placeDetailsRequest({reference:response.results[i].reference,
-					      fields:"name,formatted_phone_number,international_phone_number,formatted_address,url,website,geometry"},
-					     placeDetailFunc);
-	}
-    }
-
-    await googlePlaces.placeSearch(parameters, placeSearchFunc);
-
-    function waitForIt() {
-        if (results.length < 3) {
-            setTimeout(function(){waitForIt()},100);
-        } else {
-	    // console.log(results);
-	    callback(results);
-	    // return results;
-        };
-    }
-
-    waitForIt();
+const placeDetailsRequestWrapper = (response, index) => {
+    return new Promise((resolve, reject) => {
+	const googlePlaces = new GooglePlaces(config.apiKey, "json");
+	googlePlaces.placeDetailsRequest({reference:response.results[i].reference,
+					  fields:"name,formatted_phone_number,international_phone_number,formatted_address,url,website,geometry"},
+					 (error, response) => {
+					     if (error) {
+						 console.log(error);
+						 resolve("error");
+					     }
+					     else {
+						 resolve(response.result);
+					     }
+					 });
+    });
 }
 
+const contactSearch = async (lati, longi, amenity) => {
+    return new Promise((resolve, reject) => {
+	const googlePlaces = new GooglePlaces(config.apiKey, "json");
+	const parameters = {
+	    location:[lati, longi],
+	    types:amenity,
+	    rankby:"distance"
+	};
+	googlePlaces.placeSearch(parameters,  async (error, response) => {
+	    if (error) {
+		console.log(error);
+		resolve("Error");
+	    }
+	    else {
+		let places = [];
+		for (i = 0; i != 3; i++) {
+		    place = await placeDetailsRequestWrapper(response, i);
+		    // console.log(place);
+		    places.push(place);
+		}
+		resolve(places);
+	    }
+	});
+    });
+}
+
+export default contactSearch;
+
 // const test = async() => {
-//     await contactSearch(-33.8670522, 151.1957362, "hospital",
-// 			function(results) {console.log(results);});
+//     const results = await contactSearch(-33.8670522, 151.1957362, "hospital");
+//     console.log(results);
 // }
 
 // test();
