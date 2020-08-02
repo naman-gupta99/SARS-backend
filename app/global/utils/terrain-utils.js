@@ -83,7 +83,7 @@ const getTerrain = async (lon, lat) => {
     const x = await checkTerrain(lon, lat);
     return x;
   } else {
-    return "Sea";
+    return "sea";
   }
 };
 
