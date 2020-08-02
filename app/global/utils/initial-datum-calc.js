@@ -107,7 +107,7 @@ const getCoordinates = (lon, lat, dist, heading) => {
 const calculatePointofImpact = (req) => {
   const lon = parseFloat(req.longitude);
   const lat = parseFloat(req.latitude);
-  const alt = req.altitude;
+  const alt = req.altitude * 0.3048;
   const gSpeed = req.groundSpeed * 0.514444;
   const vSpeed = req.verticalSpeed * 0.00508;
   const heading = req.heading;
