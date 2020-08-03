@@ -84,16 +84,24 @@ const getSearchPattern = (terrain, radius_large, location_known_Accuracy) => {
   } else if (radius_large) {
     if (location_known_Accuracy) {
       return search_patterns.filter(function (element) {
-        return element.radius_large && element.location_known_Accuracy;
+        return (
+          element.radius_large &&
+          element.location_known_Accuracy &&
+          element.terrain == terrain
+        );
       });
     } else {
       return search_patterns.filter(function (element) {
-        return element.radius_large && !element.location_known_Accuracy;
+        return (
+          element.radius_large &&
+          !element.location_known_Accuracy &&
+          element.terrain == terrain
+        );
       });
     }
   } else {
     return search_patterns.filter(function (element) {
-      return !element.radius_large;
+      return !element.radius_large && element.terrain == terrain;
     });
   }
 };
