@@ -39,7 +39,7 @@ const getSearchPatternMap = async (long, lat, radius, trustVal) => {
   res.box = await getBoundingBox(long, lat, radius, trustVal);
 
   const terrain = await getTerrain(long, lat);
-  const large_radius = radius > 20;
+  const large_radius = radius > 6;
   const location_accuracy = trustVal > 65;
 
   res.searchPattern = getSearchPattern(
