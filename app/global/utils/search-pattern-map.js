@@ -3,17 +3,24 @@ import getTerrain from "./terrain-utils";
 import getSearchPattern from "./search-pattern";
 
 const getBoundingBox = (long, lat, radius, trustVal) => {
+  long = parseFloat(long);
+  lat = parseFloat(lat);
+  radius = parseFloat(radius);
+  trustVal = parseInt(trustVal);
+
   return new Promise((resolve, regect) => {
     const uri = "https://cv-sih.herokuapp.com/rect";
-
-    console.log(long, lat, radius, trustVal);
 
     request.post(
       uri,
       {
         body: JSON.stringify({
-          circle: [{ center: [lat, long], radius: radius, trust: trustVal }],
+          circles: [{ center: [lat, long], radius: radius, trust: trustVal }],
+          line: [],
         }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       },
       (err, res, body) => {
         if (err) {
@@ -31,7 +38,7 @@ const getSearchPatternMap = async (long, lat, radius, trustVal) => {
 
   res.box = await getBoundingBox(long, lat, radius, trustVal);
 
-  const terrain = getTerrain(long, lat);
+  const terrain = await getTerrain(long, lat);
   const large_radius = radius > 20;
   const location_accuracy = trustVal > 65;
 
@@ -40,6 +47,8 @@ const getSearchPatternMap = async (long, lat, radius, trustVal) => {
     large_radius,
     location_accuracy
   );
+
+  res.terrain = terrain;
 
   return res;
 };

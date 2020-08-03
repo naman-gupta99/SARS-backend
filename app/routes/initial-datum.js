@@ -1,7 +1,6 @@
 import express from "express";
 import ResponseTemplate from "../global/templates/response";
 import initialDatumCalc from "../global/utils/initial-datum-calc";
-import getSearchPattern from "../global/utils/search-pattern-map";
 
 const router = express.Router();
 

@@ -6,6 +6,8 @@ const checkWaterBody = (lon, lat) => {
 };
 
 const getRandomCoordinates = (lon, lat) => {
+  lon = parseFloat(lon);
+  lat = parseFloat(lat);
   let res = [];
   for (let i = 0; i < 10; i++) {
     let arr = [lat + (Math.random() - 0.5) / 10];
@@ -46,6 +48,7 @@ const evalTerrain = (profile) => {
   });
 
   const sd = standardDeviation(values);
+
   if (sd < 100) {
     return "flat";
   } else {
@@ -72,7 +75,7 @@ const checkTerrain = (lon, lat) => {
         resolve("err");
       } else {
         body = JSON.parse(body);
-        resolve(evalTerrain(body.results));
+        resolve(body.results);
       }
     });
   });
@@ -81,7 +84,8 @@ const checkTerrain = (lon, lat) => {
 const getTerrain = async (lon, lat) => {
   if (checkWaterBody(lon, lat) == false) {
     const x = await checkTerrain(lon, lat);
-    return x;
+    const res = evalTerrain(x);
+    return res;
   } else {
     return "sea";
   }
