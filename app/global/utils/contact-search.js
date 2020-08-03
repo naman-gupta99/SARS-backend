@@ -1,60 +1,83 @@
+import request from "request";
 import config from "../../../config";
 
-import assert from "assert";
-import GooglePlaces from "googleplaces";
-
-// const assert = require("assert");
-// const GooglePlaces = require('googleplaces');
-// const config = require("./config.js");
-
-const placeDetailsRequestWrapper = (response, index) => {
-    return new Promise((resolve, reject) => {
-	const googlePlaces = new GooglePlaces(config.apiKey, "json");
-	googlePlaces.placeDetailsRequest({reference:response.results[i].reference,
-					  fields:"name,formatted_phone_number,international_phone_number,formatted_address,url,website,geometry"},
-					 (error, response) => {
-					     if (error) {
-						 console.log(error);
-						 resolve("error");
-					     }
-					     else {
-						 resolve(response.result);
-					     }
-					 });
+const getPlacesDetail = (placeId) => {
+  return new Promise((resolve, reject) => {
+    const uri =
+      "https://maps.googleapis.com/maps/api/place/details/json?place_id=" +
+      placeId +
+      "&fields=name,formatted_phone_number,international_phone_number,formatted_address,url,website,geometry&key=" +
+      config.google.apiKey;
+    request.get(uri, function (error, response) {
+      if (error) throw new Error(error);
+      const body = JSON.parse(response.body);
+      resolve(body.result);
     });
-}
+  });
+};
 
-const contactSearch = async (lati, longi, amenity) => {
-    return new Promise((resolve, reject) => {
-	const googlePlaces = new GooglePlaces(config.apiKey, "json");
-	const parameters = {
-	    location:[lati, longi],
-	    types:amenity,
-	    rankby:"distance"
-	};
-	googlePlaces.placeSearch(parameters,  async (error, response) => {
-	    if (error) {
-		console.log(error);
-		resolve("Error");
-	    }
-	    else {
-		let places = [];
-		for (i = 0; i != 3; i++) {
-		    place = await placeDetailsRequestWrapper(response, i);
-		    // console.log(place);
-		    places.push(place);
-		}
-		resolve(places);
-	    }
-	});
+const getPlaces = (lat, long, type) => {
+  return new Promise((resolve, reject) => {
+    const uri =
+      "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" +
+      lat +
+      "," +
+      long +
+      "&rankby=distance&type=" +
+      type +
+      "&key=" +
+      config.google.apiKey;
+
+    request.get(uri, function (error, response) {
+      if (error) throw new Error(error);
+      const body = JSON.parse(response.body);
+      let results = [];
+      const l = Math.min(3, body.results.length);
+      for (let i = 0; i < l; i++) {
+        results = [...results, body.results[i].place_id];
+      }
+
+      resolve(results);
     });
-}
+  });
+};
+
+const contactSearch = async (lat, long) => {
+  let res = {};
+
+  // Police
+  const placeIdsPolice = await getPlaces(lat, long, "police");
+  res.police = [];
+  for (let i = 0; i < placeIdsPolice.length; i++) {
+    const result = await getPlacesDetail(placeIdsPolice[i]);
+    res.police = [...res.police, result];
+  }
+
+  // Hospital
+  const placeIdsHospital = await getPlaces(lat, long, "hospital");
+  res.hospital = [];
+  for (let i = 0; i < placeIdsHospital.length; i++) {
+    const result = await getPlacesDetail(placeIdsHospital[i]);
+    res.hospital = [...res.hospital, result];
+  }
+
+  // Fire Dept
+  const placeIdsFire = await getPlaces(lat, long, "fire_station");
+  res.fire = [];
+  for (let i = 0; i < placeIdsFire.length; i++) {
+    const result = await getPlacesDetail(placeIdsFire[i]);
+    res.fire = [...res.fire, result];
+  }
+
+  // Airport
+  const placeIdsAir = await getPlaces(lat, long, "airport");
+  res.air = [];
+  for (let i = 0; i < placeIdsAir.length; i++) {
+    const result = await getPlacesDetail(placeIdsAir[i]);
+    res.air = [...res.air, result];
+  }
+
+  return res;
+};
 
 export default contactSearch;
-
-// const test = async() => {
-//     const results = await contactSearch(-33.8670522, 151.1957362, "hospital");
-//     console.log(results);
-// }
-
-// test();

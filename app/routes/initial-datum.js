@@ -5,8 +5,8 @@ import getSearchPattern from "../global/utils/search-pattern-map";
 
 const router = express.Router();
 
-// @route  GET initial-datum
-// @desc   Get initial datum using LKP
+// @route  POST initial-datum
+// @desc   Post initial datum using LKP
 // @access Private
 router.post("/", (req, res) => {
   const datum = initialDatumCalc(req.body);
